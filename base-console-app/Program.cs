@@ -33,7 +33,7 @@
 
 			//Direct query using HTTPClient (for beta endpoint calls or not available in Graph SDK)
 			HttpClient httpClient = GetAuthenticatedHTTPClient(config);
-			Uri Uri = new Uri("https://graph.microsoft.com/v1.0/users?$top=1");
+			Uri Uri = new Uri("https://graph.microsoft.com/v1.0/users?$top=5");
 			var httpResult = httpClient.GetStringAsync(Uri).Result;
 
 			Console.WriteLine("HTTP Result");
