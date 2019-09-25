@@ -336,3 +336,4 @@ appsettings.json
 
 # Visual Studio Code
 */.vscode
+*/global.json
