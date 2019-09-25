@@ -1,46 +1,40 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Microsoft.Identity.Client;
-using Microsoft.Graph;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-
 namespace ConsoleGraphTest
 {
-    // This class encapsulates the details of getting a token from MSAL and exposes it via the 
-    // IAuthenticationProvider interface so that GraphServiceClient or AuthHandler can use it.
-    // A significantly enhanced version of this class will in the future be available from
-    // the GraphSDK team.  It will supports all the types of Client Application as defined by MSAL.
-    public class MsalAuthenticationProvider : IAuthenticationProvider
-    {
-        private ConfidentialClientApplication _clientApplication;
-        private string[] _scopes;
+	using Microsoft.Graph;
+	using Microsoft.Identity.Client;
+	using System.Net.Http;
+	using System.Net.Http.Headers;
+	using System.Threading.Tasks;
 
-        public MsalAuthenticationProvider(ConfidentialClientApplication clientApplication, string[] scopes) {
-            _clientApplication = clientApplication;
-            _scopes = scopes;
-        }
+	// This class encapsulates the details of getting a token from MSAL and exposes it via the IAuthenticationProvider interface so that GraphServiceClient or AuthHandler can use it.
+	// A significantly enhanced version of this class will in the future be available from the Graph SDK team.  It will supports all the types of Client Application as defined by MSAL.
+	public class MsalAuthenticationProvider : IAuthenticationProvider
+	{
+		private ConfidentialClientApplication _clientApplication;
+		private string[] _scopes;
 
-        /// <summary>
-        /// Update HttpRequestMessage with credentials
-        /// </summary>
-        public async Task AuthenticateRequestAsync(HttpRequestMessage request)
-        {
-            var token = await GetTokenAsync();
-            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
-        }
+		public MsalAuthenticationProvider(ConfidentialClientApplication clientApplication, string[] scopes)
+		{
+			_clientApplication = clientApplication;
+			_scopes = scopes;
+		}
 
-        /// <summary>
-        /// Acquire Token 
-        /// </summary>
-        public async Task<string> GetTokenAsync()
-        {
-            AuthenticationResult authResult = null;
-            authResult = await _clientApplication.AcquireTokenForClientAsync(_scopes);
-            return authResult.AccessToken;
-        }
-    }
+		/// <summary>
+		/// Update HttpRequestMessage with credentials
+		/// </summary>
+		public async Task AuthenticateRequestAsync(HttpRequestMessage request)
+		{
+			var token = await GetTokenAsync();
+			request.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
+		}
+
+		/// <summary>
+		/// Acquire Token
+		/// </summary>
+		public async Task<string> GetTokenAsync()
+		{
+			AuthenticationResult authResult = await _clientApplication.AcquireTokenForClient(_scopes).ExecuteAsync();
+			return authResult.AccessToken;
+		}
+	}
 }
