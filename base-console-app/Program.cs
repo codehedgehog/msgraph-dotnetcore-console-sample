@@ -1,6 +1,6 @@
 ﻿namespace ConsoleGraphTest
 {
-
+	using ConsoleGraphTest;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Graph;
 	using Microsoft.Identity.Client;
@@ -25,7 +25,7 @@
 
 			//Query using Graph SDK (preferred when possible)
 			GraphServiceClient graphClient = GetAuthenticatedGraphClient(config);
-			List<QueryOption> options = new List<QueryOption> { new QueryOption("$top", "1") };
+			List<QueryOption> options = new List<QueryOption> { new QueryOption("$top", "5") };
 
 			var graphResult = graphClient.Users.Request(options).GetAsync().Result;
 			Console.WriteLine("Graph SDK Result");
